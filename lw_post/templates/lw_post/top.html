@@ -1,0 +1,26 @@
+{% load static %}
+<!-- パーティクルなし -->
+<head>
+    <link rel="stylesheet" href="{% static 'lw_post/css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<div class="container" id="message-container">
+    {% for lastwords in all_lastwords %}
+    {% if forloop.counter %}  
+    <div class="message"><p>{{ lastwords.lastwords }}</p></div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<script>
+    // メッセージの数を取得
+    const messageCount = {{ lastwords_count }};
+    
+    // アニメーションの時間を設定（基本時間は5秒、メッセージ数に応じて調整）
+    const animationDuration = Math.max(5, messageCount * 5);  // 最小5秒、1メッセージにつき0.1秒
+    
+    // アニメーションのスタイルを設定
+    document.getElementById('message-container').style.animationDuration = animationDuration + 's';
+</script>

@@ -1,0 +1,66 @@
+canvas{
+    position: absolute;
+    top: -420px;; /*パソコンの全画面で流すときは-420、会場のプロジェクターは-610*/
+    left:0;
+    z-index:-1;
+  }
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+    height: 100vh;
+    position: relative;
+}
+
+.item {
+    position: absolute;
+    bottom: 0;
+    font-size: 30px;                       /*大きさ調整*/
+    font-family: '游明朝';
+    text-align: center;
+    white-space: normal;                    
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    animation: float-up 30s linear forwards, heartbeat-opacity 1s infinite;
+    max-width: 40%;
+    transform: translateY(100vh);
+}
+
+/* パーティクルの CSS */
+.particle {
+    position: absolute;
+    width: 3px; /* パーティクルのサイズ */
+    height: 3px;
+    border-radius: 50%;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 10 /* マウスイベントを無視 */
+}
+
+/* アニメーションの範囲を調整 */
+@keyframes float-up {
+    0% {
+        transform: translateY(100vh); /* 下からスタート */
+        opacity: 1; /* 初めははっきり表示 */
+    }
+    70% {
+        opacity: 1; /* 途中まではそのままの透明度 */
+    }
+    100% {
+        transform: translateY(-80vh); /* 統一された終了位置 */
+        opacity: 0.1; /* 最後には透明になる */
+    }
+}
+
+@keyframes heartbeat-opacity {
+    0%, 40%, 100% {
+        color: white;
+    }
+    20%, 60% {
+        color: gray;
+    }
+}
+
