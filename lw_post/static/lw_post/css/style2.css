@@ -1,16 +1,35 @@
 canvas{
     position: absolute;
-    top: -420px;; /*パソコンの全画面で流すときは-420、会場のプロジェクターは-610*/
+    /*top: -300px;; /*パソコンの全画面で流すときは-420、会場のプロジェクターは-610*/
     left:0;
-    z-index:-1;
+    bottom: 0;
+    z-index:10;
+    /*height: 100px;*/
+    width: 100%;
+    background-color: aqua;
+    margin-top: calc((100vh - 45vw) / 2);
   }
 
 body {
+    width: 400vw; 
+    overflow-x: scroll;
+    overflow-y: hidden;
     margin: 0;
-    overflow: hidden;
-    background-color: black;
-    height: 100vh;
+    background-color: green;
+    height: 45vw;
     position: relative;
+}
+
+.all-container {
+    width: 400vw;
+    height: 45vw;
+    margin-top: calc((100vh - 45vw) / 2);
+    background-color: black;
+    z-index: 11;
+}
+
+.waves {
+    background-color: aqua;
 }
 
 .item {
@@ -27,6 +46,7 @@ body {
     animation: float-up 30s linear forwards, heartbeat-opacity 1s infinite;
     max-width: 40%;
     transform: translateY(100vh);
+    z-index: 11;
 }
 
 /* パーティクルの CSS */
@@ -50,7 +70,7 @@ body {
         opacity: 1; /* 途中まではそのままの透明度 */
     }
     100% {
-        transform: translateY(-80vh); /* 統一された終了位置 */
+        transform: translateY(-70vh); /* 統一された終了位置 */
         opacity: 0.1; /* 最後には透明になる */
     }
 }

@@ -11,7 +11,13 @@
     <title>LAST WORDS</title>
 </head>
 <body>
-    <div id="particle-container"></div>
+    <div class="all-container">
+        <div id="particle-container"></div>
+        <script>
+            const items = JSON.parse('{{ items|safe|escapejs }}');
+        </script>
+        <script src="{% static 'lw_post/js/top2-animation.js' %}"></script>
+    </div>
     <script type="module">
         import * as THREE from 'https://unpkg.com/three@0.153.0/build/three.module.js';
         const SEPARATION = 20, AMOUNTX = 200, AMOUNTY = 35;
@@ -26,11 +32,12 @@
             container = document.createElement('div');
             document.body.appendChild(container);
             container.className = 'waves';
-        
-            camera = new THREE.PerspectiveCamera(120, window.innerWidth / window.innerHeight, 1, 10000);
-            camera.position.y = 300;
+            const allContainer = document.querySelector('.all-container');
+
+            camera = new THREE.PerspectiveCamera(120, window.innerWidth*4 / window.innerWidth*0.45, 1, 10000);
+            camera.position.y = 60;
             camera.position.z = 300;
-            camera.rotation.x = 0;
+            camera.rotation.x = 200;
         
             scene = new THREE.Scene();
             particles = [];
@@ -53,7 +60,7 @@ for (let ix = 0; ix < AMOUNTX; ix++) {
         particle = new THREE.Mesh(geometry, material);
         particle.position.x = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
         particle.position.z = iy * SEPARATION - ((AMOUNTY * SEPARATION) - 10);
-        particle.position.y = 20;
+        particle.position.y = 100;
         
         particle.scale.set(0.8, 0.8, 0.8);
         scene.add(particle);
@@ -62,21 +69,24 @@ for (let ix = 0; ix < AMOUNTX; ix++) {
 }
         
             renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
-        
-            renderer.setClearColor(0x000000, 1);
+            renderer.setSize(window.innerWidth, window.innerWidth*0.45);
+            allContainer.appendChild(renderer.domElement);
+            renderer.setClearColor(0x00FFFF, 1)
             window.addEventListener('resize', onWindowResize, false);
         }
         function onWindowResize() {
-            windowHalfX = window.innerWidth / 2;
-            windowHalfY = window.innerHeight / 2;
-
-            camera.aspect = window.innerWidth / window.innerHeight;
+            // ウィンドウの新しい幅と高さを取得
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+    
+            // カメラのアスペクト比を更新
+            camera.aspect = width*4 / width*0.45;
             camera.updateProjectionMatrix();
-
-            renderer.setSize(window.innerWidth, window.innerHeight);
+    
+            // レンダラーのサイズを更新
+            renderer.setSize(width*4, width*0.45);
         }
+    
 
         function animate() {
             requestAnimationFrame(animate);
@@ -96,9 +106,5 @@ for (let ix = 0; ix < AMOUNTX; ix++) {
             count += 0.05;
         }
     </script>
-    <script>
-        const items = JSON.parse('{{ items|safe|escapejs }}');
-    </script>
-    <script src="{% static 'lw_post/js/top2-animation.js' %}"></script>
 </body>
 </html>
