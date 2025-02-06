@@ -8,7 +8,7 @@ function createItemElement(content) {
     item.textContent = content;
 
     // アイテムの横位置をランダムに設定
-    const randomX = Math.floor(Math.random() * (window.innerWidth - window.innerWidth * 0.4));
+    const randomX = Math.floor(Math.random() * 4 * window.innerWidth);
     item.style.left = `${randomX}px`;
 
     // アイテムをドキュメントに追加
