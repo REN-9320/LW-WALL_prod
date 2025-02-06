@@ -8,7 +8,7 @@ function createItemElement(content) {
     item.textContent = content;
 
     // アイテムの横位置をランダムに設定
-    const randomX = Math.floor(Math.random() * 4 * window.innerWidth);
+    const randomX = Math.floor(Math.random() * 4 * window.innerWidth - window.innerWidth*0.4);
     item.style.left = `${randomX}px`;
 
     // アイテムをドキュメントに追加
@@ -46,17 +46,17 @@ function createParticles(item, isFinalBurst = false) {
     }
 
     // アイテムの位置を基にしてパーティクルを生成し、同じ位置から分解するように配置
-    const itemRect = item.getBoundingClientRect(); // アイテムの位置を取得
-    //const itemCenterX = itemRect.left +  Math.random() * itemRect.width  //itemRect.width / 2; // アイテムの中央X座標
-    const itemCenterX = itemRect.left + itemRect.width / 2;
-    const itemCenterY = itemRect.top + itemRect.height / 2; // アイテムの中央Y座標
+    const itemRect = item.getBoundingClientRect();
+
+    const itemCenterX = itemRect.left + itemRect.width / 2 - particleContainer.getBoundingClientRect().left;
+    const itemCenterY = itemRect.top + itemRect.height / 2 - particleContainer.getBoundingClientRect().top;
 
     // パーティクルを生成し、パーティクルコンテナに追加
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
-        const xPosition = Math.max(itemRect.left, Math.min(itemCenterX + (Math.random() - 0.5) * itemRect.width, itemRect.right));
-        const yPosition = itemCenterY
+        const xPosition = itemCenterX + (Math.random() - 0.5) * itemRect.width;
+        const yPosition = itemCenterY + (Math.random() - 0.5) * itemRect.height;
 
         particle.style.left = `${xPosition}px`;
         particle.style.top = `${yPosition}px`;

@@ -3,7 +3,7 @@ canvas{
     /*top: -300px;; /*パソコンの全画面で流すときは-420、会場のプロジェクターは-610*/
     left:0;
     bottom: 0;
-    z-index:10;
+    z-index:0;
     /*height: 100px;*/
     width: 100%;
     background-color: black;
@@ -25,12 +25,12 @@ body {
     height: 45vw;
     margin-top: calc((100vh - 45vw) / 2);
     background-color: black;
-    z-index: 11;
+    z-index: 0;
 }
 
-.waves {
+/*.waves {
     background-color: black;
-}
+}*/
 
 .item {
     position: absolute;
@@ -46,7 +46,7 @@ body {
     animation: float-up 30s linear forwards, heartbeat-opacity 1s infinite;
     max-width: calc(160vw);
     transform: translateY(100vh);
-    z-index: 11;
+    z-index:1;
 }
 
 /* パーティクルの CSS */
@@ -57,8 +57,10 @@ body {
     border-radius: 50%;
     opacity: 0.8;
     pointer-events: none;
-    z-index: 10 /* マウスイベントを無視 */
+    z-index: 10; /* マウスイベントを無視 */
+    transform: translate(-50%, -50%);
 }
+
 
 /* アニメーションの範囲を調整 */
 @keyframes float-up {

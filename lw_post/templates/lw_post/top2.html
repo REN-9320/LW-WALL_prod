@@ -11,8 +11,8 @@
     <title>LAST WORDS</title>
 </head>
 <body>
+    <div id="particle-container"></div>
     <div class="all-container">
-        <div id="particle-container"></div>
         <script>
             const items = JSON.parse('{{ items|safe|escapejs }}');
         </script>
@@ -29,9 +29,9 @@
         animate();
 
         function init() {
-            container = document.createElement('div');
-            document.body.appendChild(container);
-            container.className = 'waves';
+            //container = document.createElement('div');
+            //document.body.appendChild(container);
+            //container.className = 'waves';
             const allContainer = document.querySelector('.all-container');
 
             camera = new THREE.PerspectiveCamera(120, window.innerWidth*4 / window.innerWidth*0.45, 1, 10000);
