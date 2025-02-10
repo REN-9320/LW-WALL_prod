@@ -13,6 +13,7 @@
 <body>
     <div id="particle-container"></div>
     <div class="all-container">
+        <div class="test-range"></div>
         <script>
             const items = JSON.parse('{{ items|safe|escapejs }}');
         </script>
@@ -34,7 +35,7 @@
             //container.className = 'waves';
             const allContainer = document.querySelector('.all-container');
 
-            camera = new THREE.PerspectiveCamera(120, window.innerWidth*4 / window.innerWidth*0.45, 1, 10000);
+            camera = new THREE.PerspectiveCamera(120, window.innerWidth*5 / window.innerWidth*0.45, 1, 10000);
             camera.position.y = 60;
             camera.position.z = 300;
             camera.rotation.x = 200;
@@ -69,7 +70,7 @@ for (let ix = 0; ix < AMOUNTX; ix++) {
 }
         
             renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(window.innerWidth*4, window.innerWidth*0.45);
+            renderer.setSize(window.innerWidth*5, window.innerWidth*0.45);
             allContainer.appendChild(renderer.domElement);
             renderer.setClearColor(0x000000, 1)
             window.addEventListener('resize', onWindowResize, false);
@@ -80,11 +81,11 @@ for (let ix = 0; ix < AMOUNTX; ix++) {
             const height = window.innerHeight;
     
             // カメラのアスペクト比を更新
-            camera.aspect = width*4 / width*0.45;
+            camera.aspect = width*5 / width*0.45;
             camera.updateProjectionMatrix();
     
             // レンダラーのサイズを更新
-            renderer.setSize(width*4, width*0.45);
+            renderer.setSize(width*5, width*0.45);
         }
     
 

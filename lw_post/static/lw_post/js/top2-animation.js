@@ -2,15 +2,17 @@ const screenWidth = window.innerWidth;
 let completedAnimations = 0;
 
 // アイテム要素を生成し、アニメーションを設定する関数
-function createItemElement(content) {
+
+
+function createItemElement(content, seed_screen, seed_x) {
+
     const item = document.createElement('div');
     item.className = 'item';
     item.textContent = content;
-
     // アイテムの横位置をランダムに設定
-    const randomX = Math.floor(Math.random() * 4 * window.innerWidth - window.innerWidth*0.4);
-    item.style.left = `${randomX}px`;
+    const randomX = window.innerWidth * (seed_screen - 1) + window.innerWidth * (seed_x / 5);
 
+    item.style.left = `${randomX}px`;
     // アイテムをドキュメントに追加
     document.body.appendChild(item);
 
@@ -28,7 +30,6 @@ function createItemElement(content) {
         completedAnimations++;
 
         if (completedAnimations === items.length) {
-            console.log('全てのアニメーションが完了しました。リロードします...');
             location.reload();
         }
     });
@@ -103,7 +104,7 @@ let index = 0;
 // アイテムを順に表示する関数
 function showNextItem() {
     if (index < items.length) {
-        createItemElement(items[index].lastwords);
+        createItemElement(items[index].lastwords, items[index].seed_screen, items[index].seed_x);
         index++;
         setTimeout(showNextItem, 5000);
     }
