@@ -22,5 +22,5 @@ def top_test(request): #パーティクルあり
     #messages = list(LW.objects.values('id', 'lastwords').order_by('?')[:50])
     
     #最新から順番パターン(投稿がまばらなとき)
-    messages = list(LW.objects.values('id', 'lastwords').all().order_by('-id')[:50])
+    messages = list(LW.objects.values('id', 'lastwords', 'seed_screen', 'seed_x').all().order_by('-id')[:50])
     return render(request, 'lw_post/top2.html', {'items': json.dumps(messages)})
