@@ -30,7 +30,10 @@ function createItemElement(content, seed_screen, seed_x) {
         completedAnimations++;
 
         if (completedAnimations === items.length) {
-            location.reload();
+            // リセットして再実行
+            completedAnimations = 0;
+            index = 0;
+            setTimeout(showNextItem, 2000); // 少し間を空けて再実行
         }
     });
 }

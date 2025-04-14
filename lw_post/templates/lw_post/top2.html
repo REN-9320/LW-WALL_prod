@@ -35,7 +35,7 @@
             //container.className = 'waves';
             const allContainer = document.querySelector('.all-container');
 
-            camera = new THREE.PerspectiveCamera(120, window.innerWidth*5 / window.innerWidth*0.45, 1, 10000);
+            camera = new THREE.PerspectiveCamera(120, window.innerWidth / window.innerHeight, 1, 10000);
             camera.position.y = 60;
             camera.position.z = 300;
             camera.rotation.x = 200;
