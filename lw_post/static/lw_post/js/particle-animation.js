@@ -6,6 +6,7 @@ class ParticleSystem {
       particleSize: 2, // Size in pixels
       colors: ['#FF0000', '#0000FF', '#FFFFFF'], // Red, Blue, White
       bpm: 75, // Beats per minute for rhythm
+      animationDuration: 60000, // Duration in ms (1 minute)
       ...options
     };
 
@@ -79,6 +80,7 @@ class ParticleSystem {
     
     const elementData = {
       element,
+      createdAt: Date.now(), // Track when the element was added
       rect: {
         x: rect.left - containerRect.left,
         y: rect.top - containerRect.top,
@@ -90,6 +92,14 @@ class ParticleSystem {
     };
     
     this.activeElements.set(id, elementData);
+    
+    // Schedule removal after animation duration (1 minute)
+    setTimeout(() => {
+      if (this.activeElements.has(id)) {
+        this.activeElements.delete(id);
+      }
+    }, this.options.animationDuration);
+    
     return id;
   }
   
@@ -122,6 +132,22 @@ class ParticleSystem {
     this.ctx.clearRect(0, 0, this.width, this.height);
     
     const phase = (currentTime % this.cycleTime) / this.cycleTime;
+    
+    for (const [id, data] of this.activeElements.entries()) {
+      if (document.body.contains(data.element)) {
+        const rect = data.element.getBoundingClientRect();
+        const containerRect = this.container.getBoundingClientRect();
+        
+        data.rect = {
+          x: rect.left - containerRect.left,
+          y: rect.top - containerRect.top,
+          width: rect.width,
+          height: rect.height,
+          centerX: rect.left - containerRect.left + rect.width / 2,
+          centerY: rect.top - containerRect.top + rect.height / 2
+        };
+      }
+    }
     
     for (const particle of this.particles) {
       particle.update(deltaTime, phase);

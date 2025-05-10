@@ -16,25 +16,28 @@ function createItemElement(content, seed_screen, seed_x) {
     // アイテムをドキュメントに追加
     document.body.appendChild(item);
 
-    // アニメーション中の粒子漏れを定期的に生成
-    const intervalId = setInterval(() => createParticles(item, false), 100); // 700ミリ秒ごとに漏れ出す
+    // アニメーション中の粒子漏れを定期的に生成（1分間）
+    const intervalId = setInterval(() => createParticles(item, false), 100); // 100ミリ秒ごとに漏れ出す
 
     // アニメーション終了時にパーティクルを生成
     item.addEventListener('animationend', () => {
         // アニメーション終了時に粒子生成を止める
-        clearInterval(intervalId);
+        
         createParticles(item, true); // 最後の粒子生成
 
-        // 粒子生成後にアイテムを削除
-        setTimeout(() => item.remove(), 0);
-        completedAnimations++;
+        // 粒子生成後にアイテムを削除する前に、1分間待つ
+        setTimeout(() => {
+            clearInterval(intervalId);
+            item.remove();
+            completedAnimations++;
 
-        if (completedAnimations === items.length) {
-            // リセットして再実行
-            completedAnimations = 0;
-            index = 0;
-            setTimeout(showNextItem, 2000); // 少し間を空けて再実行
-        }
+            if (completedAnimations === items.length) {
+                // リセットして再実行
+                completedAnimations = 0;
+                index = 0;
+                setTimeout(showNextItem, 2000); // 少し間を空けて再実行
+            }
+        }, 60000); // 1分間（60000ミリ秒）待つ
     });
 }
 
