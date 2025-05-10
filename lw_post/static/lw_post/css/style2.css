@@ -53,13 +53,23 @@ body {
 /* パーティクルの CSS */
 .particle {
     position: absolute;
-    width: 3px; /* パーティクルのサイズ */
-    height: 3px;
+    width: 2px; /* パーティクルのサイズ */
+    height: 2px;
     border-radius: 50%;
     opacity: 0.8;
     pointer-events: none;
     z-index: 10; /* マウスイベントを無視 */
     transform: translate(-50%, -50%);
+}
+
+#particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
 }
 
 

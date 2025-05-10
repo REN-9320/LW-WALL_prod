@@ -93,14 +93,14 @@ function animateParticle(particle, isFinalBurst) {
     }, duration * 1000);
 }
 
-// 最後の分散は白、それ以外は青
+// 最後の分散は白、それ以外はランダムに赤・青・白
 function getRandomColor(isFinalBurst) {
     if (isFinalBurst) {
-        return '#FFFFFF'
+        return '#FFFFFF';
     } else {
-        return '#0095D9'
+        const colors = ['#FF0000', '#0000FF', '#FFFFFF']; // 赤、青、白
+        return colors[Math.floor(Math.random() * colors.length)];
     }
-    //return '#FFFFFF';
 }
 
 let index = 0;
