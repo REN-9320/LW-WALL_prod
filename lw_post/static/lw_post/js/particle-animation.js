@@ -93,12 +93,22 @@ class ParticleSystem {
     
     this.activeElements.set(id, elementData);
     
-    // Schedule removal after animation duration (1 minute)
+    const style = window.getComputedStyle(element);
+    const animationDuration = style.animationDuration;
+    let durationMs = 30000; // Default to 30 seconds
+    if (animationDuration) {
+      const match = animationDuration.match(/(\d+)s/);
+      if (match && match[1]) {
+        durationMs = parseInt(match[1], 10) * 1000;
+      }
+    }
+    
+    // Schedule removal after the full animation completes (animation duration + extra time)
     setTimeout(() => {
       if (this.activeElements.has(id)) {
         this.activeElements.delete(id);
       }
-    }, this.options.animationDuration);
+    }, durationMs + this.options.animationDuration);
     
     return id;
   }
@@ -138,13 +148,22 @@ class ParticleSystem {
         const rect = data.element.getBoundingClientRect();
         const containerRect = this.container.getBoundingClientRect();
         
+        const style = window.getComputedStyle(data.element);
+        const opacity = parseFloat(style.opacity);
+        
+        const isVisible = !(
+          rect.bottom < -100 || // Allow some leeway above the viewport
+          opacity < 0.05       // Only consider it invisible when very transparent
+        );
+        
         data.rect = {
           x: rect.left - containerRect.left,
           y: rect.top - containerRect.top,
           width: rect.width,
           height: rect.height,
           centerX: rect.left - containerRect.left + rect.width / 2,
-          centerY: rect.top - containerRect.top + rect.height / 2
+          centerY: rect.top - containerRect.top + rect.height / 2,
+          isVisible: isVisible
         };
       }
     }
@@ -191,6 +210,8 @@ class Particle {
     let minDistance = Infinity;
     
     for (const [id, data] of this.system.activeElements.entries()) {
+      if (data.rect.isVisible === false) continue;
+      
       const dx = this.x - data.rect.centerX;
       const dy = this.y - data.rect.centerY;
       const distance = Math.sqrt(dx * dx + dy * dy);
