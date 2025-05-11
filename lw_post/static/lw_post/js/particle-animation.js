@@ -2,8 +2,8 @@
 class ParticleSystem {
   constructor(containerSelector, options = {}) {
     this.options = {
-      particleCount: 250, // Number of particles (200-300)
-      particleSize: 2, // Size in pixels
+      particleCount: 100000, // Number of particles (200-300)
+      particleSize: 3, // Size in pixels
       colors: ['#FF0000', '#0000FF', '#FFFFFF'], // Red, Blue, White
       bpm: 75, // Beats per minute for rhythm
       animationDuration: 60000, // Duration in ms (1 minute)
@@ -40,7 +40,7 @@ class ParticleSystem {
     this.canvas.style.width = '100%';
     this.canvas.style.height = '100%';
     this.canvas.style.pointerEvents = 'none'; // Allow clicks to pass through
-    this.canvas.style.zIndex = '0'; // Behind text but above background
+    this.canvas.style.zIndex = '10'; // Behind text but above background
     
     this.container.appendChild(this.canvas);
     this.resizeCanvas();
@@ -204,7 +204,7 @@ class Particle {
   update(deltaTime, phase) {
     const phaseRadians = phase * Math.PI * 2 + this.phaseOffset;
     
-    const expansionFactor = Math.sin(phaseRadians) * 0.5 + 0.5;
+    const expansionFactor = Math.sin(phaseRadians) * 1 + 0.5;
     
     let nearestElement = null;
     let minDistance = Infinity;
@@ -245,8 +245,9 @@ class Particle {
       this.vy -= dy * force / this.mass;
     }
     
-    this.vx *= 0.98;
-    this.vy *= 0.98;
+    const speedFactor = this.system.options.bpm / 75; // 基準BPMを75と仮定
+    this.vx *= 0.98 * speedFactor;
+    this.vy *= 0.98 * speedFactor;
     
     this.x += this.vx * deltaTime * 0.05;
     this.y += this.vy * deltaTime * 0.05;
