@@ -13,11 +13,22 @@
 <body>
     <div id="particle-container"></div>
     <div class="all-container">
-        <div class="test-range"></div>
+        <div class="test-range">
+            <div class="display_min_container">
+                <p class="display_min"></p>
+                <p class="all_min">/4321</p>
+            </div>
+            <div class="display_info">
+                <div class="bpm"></div>
+                <div class="LW_flag"></div>
+                <div class="step_flag"></div>
+            </div>
+        </div>
         <script>
             const items = JSON.parse('{{ items|safe|escapejs }}');
         </script>
         <script src="{% static 'lw_post/js/top2-animation.js' %}"></script>
+        <script src="{% static "lw_post/js/top2-api.js" %}"></script>
     </div>
     <script type="module">
         import * as THREE from 'https://unpkg.com/three@0.153.0/build/three.module.js';
@@ -45,29 +56,29 @@
         
             // 円形ジオメトリを作成
             const geometry = new THREE.CircleGeometry(0.3, 32);
-for (let ix = 0; ix < AMOUNTX; ix++) {
-    for (let iy = 0; iy < AMOUNTY; iy++) {
-        const blueRatio = iy / AMOUNTY;
-        let color;
+        for (let ix = 0; ix < AMOUNTX; ix++) {
+            for (let iy = 0; iy < AMOUNTY; iy++) {
+                const blueRatio = iy / AMOUNTY;
+                let color;
 
-        // 10% の確率で色を黒に設定
-        if (Math.random() < 0.6) {
-            color = new THREE.Color(0, 0, 0); // 黒色
-        } else {
-            color = new THREE.Color(1, blueRatio, blueRatio); // 通常のグラデーションカラー
+                // 10% の確率で色を黒に設定
+                if (Math.random() < 0.6) {
+                    color = new THREE.Color(0, 0, 0); // 黒色
+                } else {
+                    color = new THREE.Color(1, blueRatio, blueRatio); // 通常のグラデーションカラー
+                }
+
+                const material = new THREE.MeshBasicMaterial({ color: color, transparent: true });
+                particle = new THREE.Mesh(geometry, material);
+                particle.position.x = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
+                particle.position.z = iy * SEPARATION - ((AMOUNTY * SEPARATION) - 10);
+                particle.position.y = 100;
+                
+                particle.scale.set(0.8, 0.8, 0.8);
+                scene.add(particle);
+                particles.push(particle);
+            }
         }
-
-        const material = new THREE.MeshBasicMaterial({ color: color, transparent: true });
-        particle = new THREE.Mesh(geometry, material);
-        particle.position.x = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
-        particle.position.z = iy * SEPARATION - ((AMOUNTY * SEPARATION) - 10);
-        particle.position.y = 100;
-        
-        particle.scale.set(0.8, 0.8, 0.8);
-        scene.add(particle);
-        particles.push(particle);
-    }
-}
         
             renderer = new THREE.WebGLRenderer({ alpha: true });
             renderer.setSize(window.innerWidth*5, window.innerWidth*0.45);
