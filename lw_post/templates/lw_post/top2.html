@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Klee+One&display=swap" rel="stylesheet">
     <title>LAST WORDS</title>
 </head>
 <body>
@@ -17,95 +18,8 @@
         <script>
             const items = JSON.parse('{{ items|safe|escapejs }}');
         </script>
+        <!-- <script src="{% static 'lw_post/js/particle-animation.js' %}"></script> -->
         <script src="{% static 'lw_post/js/top2-animation.js' %}"></script>
     </div>
-    <script type="module">
-        import * as THREE from 'https://unpkg.com/three@0.153.0/build/three.module.js';
-        const SEPARATION = 20, AMOUNTX = 200, AMOUNTY = 35;
-        let container, camera, scene, renderer, particles, particle, count = 0;
-        let windowHalfX = window.innerWidth / 2;
-        let windowHalfY = window.innerHeight / 2;
-
-        init();
-        animate();
-
-        function init() {
-            //container = document.createElement('div');
-            //document.body.appendChild(container);
-            //container.className = 'waves';
-            const allContainer = document.querySelector('.all-container');
-
-            camera = new THREE.PerspectiveCamera(120, window.innerWidth / window.innerHeight, 1, 10000);
-            camera.position.y = 60;
-            camera.position.z = 300;
-            camera.rotation.x = 200;
-        
-            scene = new THREE.Scene();
-            particles = [];
-        
-            // 円形ジオメトリを作成
-            const geometry = new THREE.CircleGeometry(0.3, 32);
-for (let ix = 0; ix < AMOUNTX; ix++) {
-    for (let iy = 0; iy < AMOUNTY; iy++) {
-        const blueRatio = iy / AMOUNTY;
-        let color;
-
-        // 10% の確率で色を黒に設定
-        if (Math.random() < 0.6) {
-            color = new THREE.Color(0, 0, 0); // 黒色
-        } else {
-            color = new THREE.Color(1, blueRatio, blueRatio); // 通常のグラデーションカラー
-        }
-
-        const material = new THREE.MeshBasicMaterial({ color: color, transparent: true });
-        particle = new THREE.Mesh(geometry, material);
-        particle.position.x = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
-        particle.position.z = iy * SEPARATION - ((AMOUNTY * SEPARATION) - 10);
-        particle.position.y = 100;
-        
-        particle.scale.set(0.8, 0.8, 0.8);
-        scene.add(particle);
-        particles.push(particle);
-    }
-}
-        
-            renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(window.innerWidth*5, window.innerWidth*0.45);
-            allContainer.appendChild(renderer.domElement);
-            renderer.setClearColor(0x000000, 1)
-            window.addEventListener('resize', onWindowResize, false);
-        }
-        function onWindowResize() {
-            // ウィンドウの新しい幅と高さを取得
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-    
-            // カメラのアスペクト比を更新
-            camera.aspect = width*5 / width*0.45;
-            camera.updateProjectionMatrix();
-    
-            // レンダラーのサイズを更新
-            renderer.setSize(width*5, width*0.45);
-        }
-    
-
-        function animate() {
-            requestAnimationFrame(animate);
-            render();
-        }
-
-        function render() {
-            let i = 0;
-            for (let ix = 0; ix < AMOUNTX; ix++) {
-                for (let iy = 0; iy < AMOUNTY; iy++) {
-                    particle = particles[i++];
-                    particle.position.y = (Math.sin((ix + count) * 0.5) * 10) + (Math.sin((iy + count) * 0.5) * 10) + 20; // さらに下げる
-                    particle.scale.x = particle.scale.y = (Math.sin((ix + count) * 0.3) + 2) * 2 + (Math.sin((iy + count) * 0.5) + 1) * 2;
-                }
-            }
-            renderer.render(scene, camera);
-            count += 0.05;
-        }
-    </script>
 </body>
 </html>
