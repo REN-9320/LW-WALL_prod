@@ -23,5 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('1', top, name='top'),
     path('', top_test, name='top_test'),
-    path('api', data_api, name='data_api'),
+    path('api/', data_api, name='data_api'),
 ]

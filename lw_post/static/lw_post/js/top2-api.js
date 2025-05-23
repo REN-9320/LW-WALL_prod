@@ -10,9 +10,21 @@ function callAPI() {
         .then(data => {
             console.log(data);
             display_min.textContent = data.display_min;
-            bpm.textContent = data.bpm_latest;
-            LW_flag.textContent = data.LW_flag;
-            step_flag.textContent = data.step_flag;
+            bpm.textContent = `Current: ${data.bpm_latest} bpm`;
+            if (data.LW_flag === '1') {
+                LW_flag.classList.add("flag_on");
+                document.querySelector('.LW_flag img').src = LW_on_src;
+            } else {
+                LW_flag.classList.remove("flag_on");
+                document.querySelector('.LW_flag img').src = LW_off_src;
+            }
+            if (data.step_flag === '1') {
+                step_flag.classList.add("flag_on");
+                document.querySelector('.step_flag img').src = step_on_src;
+            } else {
+                step_flag.classList.remove("flag_on");
+                document.querySelector('.step_flag img').src = step_off_src;
+            }
         })
         .catch(error => {
             console.error("API呼び出しエラー:", error);

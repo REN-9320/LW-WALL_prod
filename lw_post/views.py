@@ -70,6 +70,5 @@ def data_api(request):
             
         front_response = {"LW_flag":LW_flag, "step_flag":step_flag, "bpm_latest":bpm_latest, "display_min":display_min}    
         print(front_response)
-        print(prev_datetime)
 
-    return JsonResponse(front_response)
+        return JsonResponse(front_response)
