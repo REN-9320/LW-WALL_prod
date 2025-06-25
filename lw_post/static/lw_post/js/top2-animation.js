@@ -1,51 +1,46 @@
 const screenWidth = window.innerWidth;
 let completedAnimations = 0;
-
+let animationStarted = false;
+let animation_bpm = 60;
 // アイテム要素を生成し、アニメーションを設定する関数
 
 
 function createItemElement(content, seed_screen, seed_x) {
-
     const item = document.createElement('div');
     item.className = 'item';
     item.textContent = content;
-    // アイテムの横位置をランダムに設定
-    const randomX = window.innerWidth * (seed_screen - 1) + window.innerWidth * (seed_x / 5);
 
+    const randomX = window.innerWidth * (seed_screen - 1) + window.innerWidth * (seed_x / 5);
     item.style.left = `${randomX}px`;
-    // アイテムをドキュメントに追加
     document.body.appendChild(item);
 
-    const canvas = document.getElementsByClassName('all-container');
+    // 粒子漏れを定期的に生成（このアイテム専用）
+    const intervalId = setInterval(() => createParticles(item, false), 2000 * (60 / animation_bpm));
 
-    // アニメーション中の粒子漏れを定期的に生成（1分間）
-    const intervalId = setInterval(() => createParticles(item, false), 1000); // 100ミリ秒ごとに漏れ出す
-
-    setInterval(() => {
-        createUpperParticles(canvas);
-        console.log('upper particles');
-    }, 1000);
-
-    // アニメーション終了時にパーティクルを生成
+    // アニメーション終了時の処理
     item.addEventListener('animationend', () => {
-        // アニメーション終了時に粒子生成を止める
-        
-        createParticles(item, true); // 最後の粒子生成
+        createParticles(item, true); // 最後の粒子
 
-        // 粒子生成後にアイテムを削除する前に、1分間待つ
         setTimeout(() => {
-            clearInterval(intervalId);
+            clearInterval(intervalId); // 粒子生成を止める
             item.remove();
             completedAnimations++;
 
             if (completedAnimations === items.length) {
-                // リセットして再実行
                 completedAnimations = 0;
                 index = 0;
-                setTimeout(showNextItem, 500); // 少し間を空けて再実行
+                setTimeout(showNextItem, 100);
             }
-        }, 1000); // 10秒間待つ
+        }, 1000);
     });
+}
+
+const canvas = document.getElementsByClassName('all-container');
+
+if (canvas.length > 0) {
+    setInterval(() => {
+        createUpperParticles(canvas[0]);
+    }, 1000);
 }
 
 // パーティクルを生成する関数
@@ -101,18 +96,19 @@ function animateParticle(particle, isFinalBurst) {
     const turbulence = getTurbulenceEffect(particle, isFinalBurst);
 
     particle.animate([
-        { transform: 'translate(0, 0)', opacity: 1 },
-        { transform: `translate(${randomX + turbulence.x}px, ${randomY + turbulence.y}px)`, opacity: 0.6 },
-        { transform: `translate(${randomX}px, ${randomY + turbulence.Final_y}px)`, opacity: 0.2 }
-    ], {
-        duration: duration * 1000,
+        { transform: 'translate(0, 0)', opacity: 1, offset: 0 },
+        { transform: `translate(${randomX + turbulence.x}px, ${randomY + turbulence.y}px)`, opacity: 0.9, offset: 0.3 },
+        { transform: `translate(${randomX}px, ${randomY + turbulence.Final_y}px)`, opacity: 0.5, offset: 0.7 },
+        { transform: `translate(${randomX}px, ${randomY + turbulence.Final_y}px)`, opacity: 0, offset: 1 }
+      ], {
+        duration: duration * 2000 + 100,
         easing: 'ease-out',
         fill: 'forwards'
     });
 
     setTimeout(() => {
         particle.remove();
-    }, duration * 2000);
+    }, duration * 2000 + 100);
 }
 
 // 乱流の影響を計算する関数
@@ -137,39 +133,40 @@ function getRandomColor(isFinalBurst) {
 }
 
 // パーティクルを生成する関数
-function createUpperParticles(canvas) {
-    console.log(canvas);
-    const particleCount = 80; // パーティクルの数
+function createUpperParticles(canvasEl) {
+    const particleCount = 100;
 
-    // アイテムの位置を基にしてパーティクルを生成し、同じ位置から分解するように配置
-    const itemRect = canvas[0].getBoundingClientRect();
+    const itemRect = canvasEl.getBoundingClientRect();
+    const itemCenterX = itemRect.width / 2;
+    const itemCenterY = itemRect.height / 2;
 
-    const itemCenterX = itemRect.left + itemRect.width / 2 - canvas[0].getBoundingClientRect().left;
-    const itemCenterY = itemRect.top + itemRect.height / 2 - canvas[0].getBoundingClientRect().top;
-
-    // パーティクルを生成し、パーティクルコンテナに追加
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
+
         const xPosition = itemCenterX + (Math.random() - 0.5) * itemRect.width;
         const yPosition = itemRect.height * 0.05 + (Math.random() - 0.5) * itemRect.height * 0.05;
 
-        const blur = ['blur(0px)', 'blur(2px)', 'blur(6px)'];
-        const width = [4, 5, 6, 7, 8, 9, 10];
-        const height = [4, 5, 6, 7, 8, 9, 10];
-
         particle.style.left = `${xPosition}px`;
         particle.style.top = `${yPosition}px`;
-        particle.style.width = `${width[Math.floor(Math.random() * width.length * 0.6)]}px`;
-        particle.style.height = `${height[Math.floor(Math.random() * height.length * 0.6)]}px`;
+        particle.style.width = '5px';
+        particle.style.height = '5px';
+
         const particle_color = getRandomColor(false);
         particle.style.backgroundColor = particle_color.main;
         particle.style.boxShadow = particle_color.shadow;
-        particle.style.filter = blur[Math.floor(Math.random() * blur.length + 0.2)];
-        canvas[0].appendChild(particle);
+        particle.style.filter = 'blur(1px)';
 
-        // パーティクルのアニメーション
+        canvasEl.appendChild(particle);
         animateUpperParticle(particle);
+
+        // 💡 DOMノード数制限（400超えたら古いもの削除）
+        const existingParticles = document.querySelectorAll('.particle');
+        if (existingParticles.length > 300) {
+            for (let i = 0; i < 50; i++) {
+                if (existingParticles[i]) existingParticles[i].remove();
+            }
+        }
     }
 }
 
@@ -204,9 +201,7 @@ function showNextItem() {
     if (index < items.length) {
         createItemElement(items[index].lastwords, items[index].seed_screen, items[index].seed_x);
         index++;
-        setTimeout(showNextItem, 700);
+        nextItemFrame = setTimeout(() => requestAnimationFrame(showNextItem), 2000);
     }
 }
 
-// アニメーションを開始
-showNextItem();

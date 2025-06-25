@@ -14,12 +14,94 @@
 <body>
     <div id="particle-container"></div>
     <div class="all-container">
-        <div class="test-range"></div>
+        <div class="test-range">
+            <div class="display_min_container">
+                <div class="display_describe">
+                  <p>これまでの経過時間+ドネーション済み時間</p>
+                </div>
+                <p class="display_min"></p>
+                <p class="all_min">／4321</p>
+            </div>
+            <div class="progress_bar_container">
+              <div class="scales">
+                <p class="scale"><span><br>0</span></p>
+                <p class="scale"><span>12h<br>(720m)</span></p>
+                <p class="scale"><span>24h<br>(1,440m)</span></p>
+                <p class="scale"><span>36h<br>(2,160m)</span></p>
+                <p class="scale"><span>48h<br>(2,880m)</span></p>
+                <p class="scale"><span>60h<br>(3,600m)</span></p>
+                <p class="scale"><span>72h<br>(4,321m)</span></p>
+              </div>
+              <div class="progress_bar">
+                <div class="duration_ratio"></div>
+                <div class="flashing_ratio"></div>
+              </div>
+              <div class="bar_description">
+                <p><span class="pink"></span>: 経過時間</p>
+                <p><span class="red"></span>: 残りのペイフォワード済み時間</p>
+              </div>
+            </div>
+            <div class="display_info">
+                <div class="bpm"></div>
+                <div class="LW_flag">
+                  <img  class="flag_icon" src="{% static "lw_post/img/lw_off.png" %}" alt="">
+                </div>
+                <div class="step_flag">
+                  <img class="flag_icon" src="{% static "lw_post/img/step_off.png" %}" alt="">
+                </div>
+            </div>
+        </div>
         <script>
             const items = JSON.parse('{{ items|safe|escapejs }}');
         </script>
         <!-- <script src="{% static 'lw_post/js/particle-animation.js' %}"></script> -->
+        <script>
+            const LW_off_src  = "{% static 'lw_post/img/lw_off.png'  %}";
+            const LW_on_src   = "{% static 'lw_post/img/lw_on.png'   %}";
+            const step_off_src= "{% static 'lw_post/img/step_off.png' %}";
+            const step_on_src = "{% static 'lw_post/img/step_on.png'  %}";
+        </script>
         <script src="{% static 'lw_post/js/top2-animation.js' %}"></script>
+        <script src="{% static "lw_post/js/top2-api.js" %}"></script>
+        <script>
+            (function(d) {
+              var config = {
+                kitId: 'ezz1bha',         // Adobe FontsのキットID（あなたのプロジェクト専用）
+                scriptTimeout: 3000,      // スクリプトのタイムアウト時間（ミリ秒）
+                async: true               // 非同期で読み込み
+              };
+          
+              var h = d.documentElement;  // <html>要素を取得
+              var t = setTimeout(function() {
+                h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
+              }, config.scriptTimeout);   // タイムアウト後に"wf-inactive"クラスを追加（読み込み失敗時）
+          
+              var tk = d.createElement("script");     // <script>要素を作成
+              var f = false;                          // フラグ（読み込み完了かどうか）
+              var s = d.getElementsByTagName("script")[0];  // 最初の<script>要素を取得
+              var a;
+          
+              h.className += " wf-loading";           // HTMLに"wf-loading"クラスを追加（読み込み中）
+          
+              tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; // フォントキットのURLを設定
+              tk.async = true;                        // 非同期で読み込み
+          
+              // 読み込み完了時または状態変化時の処理
+              tk.onload = tk.onreadystatechange = function() {
+                a = this.readyState;
+                if (f || (a && a != "complete" && a != "loaded")) return; // 既に読み込まれていれば処理しない
+                f = true;
+                clearTimeout(t);                     // タイマーを解除
+                try {
+                  Typekit.load(config);             // フォントを読み込み
+                } catch (e) {
+                  // 読み込みエラー時の処理（何もしない）
+                }
+              };
+          
+              s.parentNode.insertBefore(tk, s);      // 作成した<script>を挿入して読み込み開始
+            })(document);
+        </script>          
     </div>
 </body>
 </html>
