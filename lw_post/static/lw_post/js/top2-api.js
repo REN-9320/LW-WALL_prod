@@ -2,6 +2,9 @@ const display_min = document.querySelector(".display_min");
 const bpm = document.querySelector(".bpm");
 const LW_flag = document.querySelector(".LW_flag");
 const step_flag = document.querySelector(".step_flag");
+const duration_ratio = document.querySelector(".duration_ratio");
+const flashing_ratio = document.querySelector(".flashing_ratio");
+const display_describe = document.querySelector(".display_describe");
 
 
 function callAPI() {
@@ -10,7 +13,11 @@ function callAPI() {
         .then(data => {
             console.log(data);
             display_min.textContent = data.display_min;
+            duration_ratio.style.width = `${data.duration_ratio * 100}%`;
+            flashing_ratio.style.width = `${data.flashing_ratio * 100}%`;
+
             bpm.textContent = `Current: ${data.bpm_latest} bpm`;
+            animation_bpm = parseInt(data.bpm_latest);
             if (data.LW_flag === '1') {
                 LW_flag.classList.add("flag_on");
                 document.querySelector('.LW_flag img').src = LW_on_src;
@@ -18,12 +25,25 @@ function callAPI() {
                 LW_flag.classList.remove("flag_on");
                 document.querySelector('.LW_flag img').src = LW_off_src;
             }
+
             if (data.step_flag === '1') {
                 step_flag.classList.add("flag_on");
                 document.querySelector('.step_flag img').src = step_on_src;
             } else {
                 step_flag.classList.remove("flag_on");
                 document.querySelector('.step_flag img').src = step_off_src;
+            }
+
+            if (data.display_min >= 4321 && !display_describe.classList.contains("mission-cleared")) {
+                const clear_text = document.createElement("p");
+                clear_text.innerHTML = "ミッションクリア!!<br>Mission Completed!!";
+                display_describe.appendChild(clear_text);
+                display_describe.classList.add("mission-cleared");
+            }
+
+            if (!animationStarted) {
+                animationStarted = true;
+                showNextItem(); // ← 最初の呼び出しをここに移す
             }
         })
         .catch(error => {
@@ -33,4 +53,4 @@ function callAPI() {
 
 // 3000ms = 3秒ごとにcallAPIを実行
 callAPI();
-setInterval(callAPI, 3000);
+setInterval(callAPI, 10000);

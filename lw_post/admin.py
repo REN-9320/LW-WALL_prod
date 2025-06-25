@@ -1,10 +1,11 @@
 from django.contrib import admin
-from .models import LW
+from .models import LW, StartTime
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 import random
 # Register your models here.
+admin.site.register(StartTime)
 
 def randint_exclude(max_screen, ex):
     i = random.randint(1,max_screen)
@@ -15,7 +16,7 @@ def randint_exclude(max_screen, ex):
 class LWResources(resources.ModelResource):
     
     #lastwords = Field(attribute='lastwords', column_name="あなたのLAST WORDSは何ですか？ (LAST WORDS = 死ぬ前に残したい言葉） What are your LAST WORDS? (LAST WORDS = Words you would like to leave behind before you die)")
-    lastwords = Field(attribute='lastwords', column_name="あなたが死ぬ前に残したい言葉はなんですか？（LASTWORDS）")
+    lastwords = Field(attribute='lastwords', column_name="LASTWORDS")
     def before_import(self, dataset, **kwargs):
         # ヘッダーの改行を取り除く
         dataset.headers = [header.replace('\n', ' ').strip() for header in dataset.headers]

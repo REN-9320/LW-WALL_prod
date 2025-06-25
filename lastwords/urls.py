@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from lw_post.views import top, top_test, data_api
+from lw_post.views import top, top_test, data_api, top_test_black
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('1', top, name='top'),
+    path('black/', top_test_black, name='top_test_black'),
     path('', top_test, name='top_test'),
     path('api/', data_api, name='data_api'),
 ]
