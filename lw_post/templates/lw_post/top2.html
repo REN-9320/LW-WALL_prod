@@ -14,12 +14,24 @@
 <body>
     <div id="particle-container"></div>
     <div class="all-container">
-        <div class="test-range"></div>
+        <div class="test-range">
+            <div class="display_min_container">
+                <p class="display_min"></p>
+                <p class="all_min">/4321</p>
+            </div>
+            <div class="display_info">
+                <div class="bpm"></div>
+                <div class="LW_flag"></div>
+                <div class="step_flag"></div>
+            </div>
+        </div>
         <script>
             const items = JSON.parse('{{ items|safe|escapejs }}');
         </script>
         <!-- <script src="{% static 'lw_post/js/particle-animation.js' %}"></script> -->
         <script src="{% static 'lw_post/js/top2-animation.js' %}"></script>
+        <script src="{% static "lw_post/js/top2-api.js" %}"></script>
     </div>
+
 </body>
 </html>
